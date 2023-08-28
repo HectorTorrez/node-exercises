@@ -1,0 +1,12 @@
+### get movies
+
+http://localhost:3000/movies
+
+
+### get movies by id
+http://localhost:3000/movies/c906673b-3948-4402-ac7f-73ac3a9e3105
+
+
+### get movie by genre
+http://localhost:3000/movies?genre=action
+
