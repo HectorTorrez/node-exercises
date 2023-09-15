@@ -1,14 +1,19 @@
 const express = require('express');
 const app = express();
+const morgan = require('morgan');
 let list = require('./list.json');
-const { unkownEnpoint } = require('./middlewares/unkownEnpoint')
+const { unkownEnpoint } = require('./middlewares/unkwonEnpoint.js')
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 app.disable('x-powered-by');
 app.use(express.json());
 
+morgan.token('body', req => {
+    return JSON.stringify(req.body)
+})
+app.use(morgan(':method :url :status :response-time ms - :body '))
 
-app.use(unkownEnpoint)
+
 
 app.get('/api/persons', (req, res) => {
     res.json(list)
@@ -47,7 +52,7 @@ app.post('/api/persons', (req, res) => {
         })
     }
 
-    const select = list.some(item => item.name.toLowerCase() === 'dan abramov')
+    const select = list.some(item => item.name.toLowerCase() === body.name)
     if (select) {
         return res.json({
             error: 'name must be unique'
@@ -60,10 +65,12 @@ app.post('/api/persons', (req, res) => {
         number: body.number
     }
 
-    // list.push(newPerson)
-
+    list.push(newPerson)
     res.json(newPerson)
+
 });
+
+app.use(unkownEnpoint)
 
 app.listen(PORT, () => {
     console.log(`Server is running in port ${PORT}`)
